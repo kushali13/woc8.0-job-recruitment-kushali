@@ -30,16 +30,16 @@ class UserProfile(models.Model):
         related_name='profile'
     )
     
-    # Common fields (both roles)
+    
     address = models.TextField(blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     
-    # Job Seeker specific fields
+    # Job Seeker field
     resume = models.FileField(upload_to='resumes/', blank=True, null=True)
     skills = models.TextField(blank=True, null=True, help_text="List your skills (comma-separated or new lines)")
     portfolio_url = models.URLField(blank=True, null=True)
     
-    # Employer specific fields
+    # Employer fields
     company_name = models.CharField(max_length=200, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     industry = models.CharField(max_length=100, blank=True, null=True)
