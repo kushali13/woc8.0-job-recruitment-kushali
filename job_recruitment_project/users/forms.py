@@ -4,8 +4,6 @@ from .models import User, UserProfile
 
 
 class UserRegistrationForm(forms.ModelForm):
-    """User Registration Form with user_type selection"""
-    
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         min_length=8,
@@ -27,6 +25,20 @@ class UserRegistrationForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
         }
     
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("A user with this username already exists.")
+        return username
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not email:
+            raise ValidationError("Email is required.")
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("A user with this email already exists.")
+        return email
+    
     def clean_password_confirm(self):
         password = self.cleaned_data.get('password')
         password_confirm = self.cleaned_data.get('password_confirm')
@@ -45,8 +57,6 @@ class UserRegistrationForm(forms.ModelForm):
 
 
 class UserProfileEditForm(forms.ModelForm):
-    """User Profile Edit Form with custom validation"""
-    
     class Meta:
         model = UserProfile
         fields = ['address', 'phone_number', 'resume', 'skills', 'portfolio_url', 
@@ -64,17 +74,13 @@ class UserProfileEditForm(forms.ModelForm):
         }
     
     def clean_resume(self):
-        """Custom validation: Resume must be PDF only"""
         resume = self.cleaned_data.get('resume')
         
         if resume:
-            # Check if file exists and has a name
             if hasattr(resume, 'name'):
-                # Check file extension
                 if not resume.name.lower().endswith('.pdf'):
                     raise ValidationError("Resume must be a PDF file. Please upload a .pdf file.")
                 
-                # Check file size (max 5MB)
                 if resume.size > 5 * 1024 * 1024:
                     raise ValidationError("Resume file size must be less than 5MB.")
         

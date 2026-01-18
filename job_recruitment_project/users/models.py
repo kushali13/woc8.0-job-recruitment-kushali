@@ -3,8 +3,6 @@ from django.db import models
 
 
 class User(AbstractUser):
-    """Custom User Model with user_type field"""
-    
     USER_TYPE_CHOICES = [
         ('employer', 'Employer'),
         ('job_seeker', 'Job Seeker'),
@@ -22,24 +20,19 @@ class User(AbstractUser):
 
 
 class UserProfile(models.Model):
-    """User Profile Model supporting both Employer and Job Seeker roles"""
-    
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         related_name='profile'
     )
     
-    
     address = models.TextField(blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     
-    # Job Seeker field
     resume = models.FileField(upload_to='resumes/', blank=True, null=True)
     skills = models.TextField(blank=True, null=True, help_text="List your skills (comma-separated or new lines)")
     portfolio_url = models.URLField(blank=True, null=True)
     
-    # Employer fields
     company_name = models.CharField(max_length=200, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     industry = models.CharField(max_length=100, blank=True, null=True)

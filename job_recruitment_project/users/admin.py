@@ -5,8 +5,6 @@ from .models import User, UserProfile
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    """Custom User Admin with user_type in list_display"""
-    
     list_display = ['username', 'email', 'user_type', 'first_name', 'last_name', 'is_staff', 'date_joined']
     list_filter = ['user_type', 'is_staff', 'is_superuser', 'is_active', 'date_joined']
     
@@ -21,8 +19,6 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    """User Profile Admin with customized display"""
-    
     list_display = ['user', 'user_type_display', 'phone_number', 'company_name', 'created_at']
     list_filter = ['created_at', 'updated_at']
     search_fields = ['user__username', 'user__email', 'company_name', 'skills']
@@ -50,6 +46,5 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
     
     def user_type_display(self, obj):
-        """Display user type in list view"""
         return obj.user.get_user_type_display()
     user_type_display.short_description = 'User Type'

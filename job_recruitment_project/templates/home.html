@@ -5,83 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Recruitment Portal</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 50px;
         }
         
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background-color: white;
+            padding: 30px;
             max-width: 600px;
-            width: 100%;
-            text-align: center;
+            margin: 0 auto;
+            border: 1px solid #ddd;
         }
         
         h1 {
-            color: #667eea;
+            color: #333;
             margin-bottom: 10px;
-            font-size: 2.5em;
         }
         
         h2 {
-            color: #764ba2;
+            color: #666;
             margin-bottom: 30px;
-            font-weight: 300;
         }
         
         .user-info {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            border-left: 4px solid #667eea;
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
         }
         
         .user-info p {
-            color: #333;
-            font-size: 1.1em;
             margin: 5px 0;
-        }
-        
-        .username {
-            color: #667eea;
-            font-weight: bold;
-            font-size: 1.2em;
         }
         
         .guest-message {
             color: #666;
-            font-style: italic;
             margin-top: 20px;
         }
         
         .admin-link {
             display: inline-block;
-            margin-top: 30px;
-            padding: 12px 24px;
-            background: #667eea;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            transition: background 0.3s;
         }
         
         .admin-link:hover {
-            background: #764ba2;
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -92,19 +66,29 @@
         
         {% if user.is_authenticated %}
             <div class="user-info">
-                <p>Hello <span class="username">{{ user.username }}</span></p>
+                <p>Hello {{ user.username }}</p>
                 <p>User Type: <strong>{{ user.get_user_type_display }}</strong></p>
                 {% if user.email %}
                     <p>Email: {{ user.email }}</p>
                 {% endif %}
             </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="{% url 'profile_edit' %}" class="admin-link" style="margin-right: 10px;">Edit Profile</a>
+                <a href="{% url 'logout' %}" class="admin-link" style="background-color: #dc3545;">Logout</a>
+            </div>
         {% else %}
             <div class="guest-message">
                 <p>You are not logged in. Please log in to access your profile.</p>
             </div>
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="{% url 'login' %}" class="admin-link" style="margin-right: 10px;">Login</a>
+                <a href="{% url 'register' %}" class="admin-link" style="background-color: #28a745;">Register</a>
+            </div>
         {% endif %}
         
-        <a href="/admin/" class="admin-link">Go to Admin Panel</a>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/admin/" class="admin-link">Go to Admin Panel</a>
+        </div>
     </div>
 </body>
 </html>
